@@ -1,0 +1,56 @@
+---
+title: "CS 710 Final Project"
+output: html_notebook
+---
+
+Installing Packages
+```{r}
+install.packages('ggplot2')
+install.packages("dplyr")
+install.packages("ggrepel")
+install.packages("png")
+```
+Uploading Libraries
+```{r}
+library(ggplot2)
+library(dplyr)
+library(lubridate)
+library(tidyr)
+library(ggrepel)
+library(png)
+library(grid)
+```
+Importing data set
+```{r}
+df <- read.csv("C:/Users/Devyn/Downloads/Video_Games.csv")
+#View(df)
+```
+Removing N/A Values
+```{r}
+df <- na.omit(df)
+```
+Plotting data set with bubble points the size corresponding to their sales
+```{r}
+ggplot(df, aes(x = Year_of_Release, y = Critic_Score, size = Global_Sales)) +
+  geom_jitter(alpha = 0.7) +
+  scale_size(range = c(1, 10)) +
+  ggtitle("Global Sales by Year of Release") +
+  xlab("Year of Release") +
+  ylab("Critic Score)")
+```
+Finding the top 50 selling video games 
+```{r}
+top_values <- df %>% top_n(50, df$Global_Sales)
+View(top_values)
+```
+Plotting data set with to 50 sold games
+```{r}
+ggplot(top_values, aes(x = Year_of_Release, y = Critic_Score, size = Global_Sales, color = Genre, label = Name)) +
+  geom_jitter(alpha = 0.7) +
+  scale_size(range = c(1, 5)) +
+  ggtitle("Top 50 Purchased Video Games Over the last 15 years") +
+  xlab("Year of Release") +
+  ylab("Critic Score")  +
+  #scale_fill_brewer(palette = "Pastel1" ) + 
+  geom_text_repel(max.overlaps = 20)
+```
